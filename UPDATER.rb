@@ -1,23 +1,23 @@
-require 'open-uri'
+require 'mechanize'
+a = Mechanize.new
+a.agent.http.verify_mode = OpenSSL::SSL::VERIFY_NONE
 puts "Please specify an install location:"
 $INSTALL_DIR = gets.chomp
 
 urls = [
-  ""
+  "https://raw.githubusercontent.com/Duod-Notyap/Game/master/main.rb"
   ]
 
 paths = [
-  "C:\#{$INSTALL_DIR}"
+  "\main.rb"
   ]
 
 urls.zip(paths).each do |url, path|
-  open(url) do |l|
-    f = File.new(path)
-    f = File.open(path, "w+")
-    content = l.read
-    f.puts content
-    f.close
-  end
+  f = File.new(path)
+  f = File.open(path, "w+")
+  content = a.new url, nil, ''
+  f.puts content
+  f.close
 end
 
 
