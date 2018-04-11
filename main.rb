@@ -1,48 +1,66 @@
 
+ ShareJobsSign UpLog In
+
+, 1
+1
+​
+2
 ################
+3
 # DEPENDENCIES #
+4
 ################
+5
 require 'gosu'
+6
 require '.\assets\classes.rb' # All common classes shared between different files will be stored in this Ruby file
-#require '.\assets\game.rb' # Main Game File?
+7
+require '.\assets\funcs.rb' # Main Game File? - THIS IS THE MAIN FILE
+8
+require '.\assets\colls.rb'
+9
 ################
-
-
-
+10
+​
+11
+​
+12
 ###########################
+13
 # LAUNCHER WINDOW DEFINED #
+14
 ###########################
-class GameWindow < Gosu::Window
+15
+class LauncherWindow < Gosu::Window
+16
   def initialize()
-    super(1920, 1080, true, 1)
+17
+    self.caption = "Launcher Window"
+18
+    super(500, 200, false, 1)
+19
     @cursor = Cursor.new(self.mouse_x, self.mouse_y)
-		self.caption = "Spaceship Game - 0.0.1 - Build 0005"
-		@playerShip = PlayerShip.new(500, 500)
-		@fps = Gosu::Font.new(20)
+20
   end
+21
   def update()
+22
     @cursor.reposition(self.mouse_x, self.mouse_y)
-		if button_down?(Gosu::KbW) && button_down?(Gosu::KbS)
-		elsif button_down?(Gosu::KbW)
-			@playerShip.moveForward
-		elsif button_down?(Gosu::KbS)
-			@playerShip.moveBack
-		end
-		if button_down?(Gosu::KbA) && button_down?(Gosu::KbD)
-		elsif button_down?(Gosu::KbA)
-			@playerShip.moveLeft
-		elsif button_down?(Gosu::KbD)
-			@playerShip.moveRight
-		end
+23
   end
+24
   def draw()
+25
     @cursor.draw
-		@playerShip.draw
-		@fps.draw(Gosu.fps, 0, 0, 1, 1.0, 1.0, 0xff_ffffff)
+26
   end
+27
 end
+28
 ###########################
+29
+​
+30
+​
 
-
-window = GameWindow.new.show
 
