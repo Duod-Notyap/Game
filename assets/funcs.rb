@@ -13,4 +13,5 @@ end
 
 curse = "0x00_00FF00"
 
-argb(curse.to_i)#wtf y u call it curse
+argb(curse.to_i)
+# Cursor - or + e = Curse
