@@ -1,7 +1,7 @@
 # RUBY CLASSES FOR SPACESHIP PROGRAM
 
 class Cursor
-  #attr_reader: :x, :y, :width, :height, :highlighting
+  attr_reader :x, :y, :width, :height, :highlighting
   def initialize(x, y)
 		@color1 = 0xFF_0000FF
 		@color2 = 0xFF_00FF00
@@ -75,6 +75,7 @@ class Cursor
 end
 
 class PlayerShip
+	attr_reader :angle, :x, :y, :z
 	def initialize(x, y)
 		@color1 = 0xFF_0000FF
 		@x = x
@@ -89,27 +90,47 @@ class PlayerShip
 	end
 	
 	def moveForward
-	
-		if @angle.abs < 90
-			cAngle = @angle.to_f
-		elsif @angle > 90 && @angle < 180
-			cAngle
-			x*-1
-		elsif @angle > 180 && @angle < 270
-			cAngle
-		    x*-1
-			y*-1
-		elsif @angle > 270 && @angle < 360
-			cAngle
-			y*-1 
+	    aAngle = @angle.to_f
+        bAngle = 90 # Right Angle Constant
+	    while true
+    	  if aAngle - 90.0 < 0
+            break
+          end
+          aAngle -= 90.0
+        end
+		cAngle = 180 - bAngle - aAngle
+		if cAngle > 90 || aAngle > 90
+			puts aAngle.to_s + ", " + cAngle.to_s + " angle" + angle.to_s
+			exit
 		end
-		cAngle = @angle.to_f
-		
-		aAngle = 90.0 - @angle.to_f
-		bSide = 10.0
-		aSide = (Math.sin(aAngle)*bSide)/Math.sin(90)
-		cSide = (Math.sin(@angle.to_f)*bSide)/Math.sin(90)
-		
+		aSide = (Math.sin(aAngle * (Math::PI / 360))/0.1)
+		cSide = (Math.sin(cAngle * (Math::PI / 360))/0.1)
+		if aSide < 0 || cSide < 0
+			puts aSide.to_s + ", " + cSide.to_s + " side" + angle.to_s
+			exit
+		end
+		if @angle%360 < 90
+		    @x += 1 * aSide
+			@y += -1 * cSide
+		elsif @angle%360 > 90 && @angle%360 < 180
+			@x += 1 * cSide
+			@y += 1 * aSide
+		elsif @angle%360 > 180 && @angle%360 < 270
+		    @x += -1 * aSide
+			@y += 1 * cSide
+		elsif @angle%360 > 270 && @angle%360 < 360
+		    @x += -1 * cSide
+			@y += -1 * aSide
+		elsif @angle == 0
+			@y -= 7.07
+		elsif @angle == 90
+		    @x += 7.07
+		elsif @angle == 180
+			@y += 7.07
+		elsif @angle == 270
+		    @x -= 7.07
+		end
+		return [aSide, cSide, @angle]
 =begin	
 		if @angle == 0
 			@y -= 10
@@ -188,17 +209,16 @@ class PlayerShip
 	end
 	
 	def moveLeft
-		@angle -= 5
-		if @angle == -360
+		@angle += 355
+		if @angle >= 25560
 			@angle = 0
 		end
+		@angle -= 360 unless @angle - 360 < -1
 	end
 	
 	def moveRight
 		@angle += 5
-		if @angle == 360
-			@angle = 0
-		end
+		@angle = 0 if @angle >= 360
 	end
 	
 	def draw
